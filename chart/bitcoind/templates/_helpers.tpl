@@ -37,3 +37,20 @@ Function to retrieve the bitcoin network, will be one of "mainnet", "testnet", "
 {{- define "network" -}}
 	{{- printf "%s" .Values.configuration.network | default "mainnet" }}
 {{- end -}}
+
+{{/*
+Function to retrieve the secret name containing the RPC password
+Handles three cases:
+1. External Secrets is enabled - use ESO-generated secret
+2. User provided an existing secret reference - use that
+3. Default - use chart-generated secret
+*/}}
+{{- define "bitcoind.rpcPasswordSecretName" -}}
+{{- if .Values.externalSecrets.enabled -}}
+{{- printf "eso-%s" (include "bitcoind.fullname" .) -}}
+{{- else if .Values.existingSecret -}}
+{{- .Values.existingSecret -}}
+{{- else -}}
+{{- include "bitcoind.name" . -}}
+{{- end -}}
+{{- end -}}

@@ -16,6 +16,11 @@ configuration:
   passwordLength: 50 #the rpc password length
   rpcallowip: 0.0.0.0/0 #use the cluster private ip range to further restrict connection attempts
 
+# Existing Secret (optional)
+# If you want to use an existing secret instead of generating one, specify the secret name here
+# The secret must contain the key 'rpcpassword'
+existingSecret: ""
+
 # ExternalSecrets configuration
 # When enabled, secrets will be sourced from an external secret store instead of being generated
 externalSecrets:
