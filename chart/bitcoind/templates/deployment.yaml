@@ -52,12 +52,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: rpcpassword
-                  name: {{ include "bitcoind.name" . }}
+                  name: {{ include "bitcoind.rpcPasswordSecretName" . }}
             - name: RPCUSER
-              valueFrom:
-                secretKeyRef:
-                  key: rpcuser
-                  name: {{ include "bitcoind.name" . }}
+              value: {{ .Values.configuration.rpcuser | default "rpcuser" | quote }}
           ports:
             - name: rpc
               containerPort: 8332
