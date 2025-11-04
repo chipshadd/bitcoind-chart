@@ -25,7 +25,6 @@ jobs:
 
       - name: Copy README to chart directory
         run: |
-          rm chart/bitcoind/README.md
           cp README.md chart/bitcoind/README.md
 
       - name: Run chart-releaser
