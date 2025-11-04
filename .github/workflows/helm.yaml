@@ -23,6 +23,11 @@ jobs:
         with:
           version: v3.5.0
 
+      - name: Copy README to chart directory
+        run: |
+          rm chart/bitcoind/README.md
+          cp README.md chart/bitcoind/README.md
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.2.1
         with:
