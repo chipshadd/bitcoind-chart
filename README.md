@@ -112,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.storageClass` | The storage class used to provision the drive. | `gp2`  |
 
 
-### Persistent Volume Settings
+### Resource Settings
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
@@ -120,3 +120,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests.memory` | You can express memory as a plain integer or as a fixed-point number using one of these quantity suffixes: E, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki. | `1G`  |
 | `resources.limits.cpu` | Limits and requests for CPU resources are measured in cpu units. | `250m`  |
 | `resources.limits.memory` | You can express memory as a plain integer or as a fixed-point number using one of these quantity suffixes: E, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki. | `1G`  |
+
+### Scheduling Settings
+
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `nodeSelector` | Node labels for pod assignment. Allows you to constrain pods to nodes with specific labels. | `{}`  |
+| `tolerations` | Tolerations for pod assignment. Allows pods to schedule onto nodes with matching taints. | `[]`  |
+
+Example usage:
+```yaml
+nodeSelector:
+  label1: value1
+  label2: value2
+
+tolerations:
+  - key: "name"
+    value: "value"
+    effect: "NoSchedule"
+```
