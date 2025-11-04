@@ -1,7 +1,7 @@
-FROM buildpack-deps:buster-curl as builder
+FROM buildpack-deps:trixie-curl as builder
 
 # This buildarg can be set during container build time with --build-arg VERSION=[version]
-ARG VERSION=25.1
+ARG VERSION=30.0
 
 RUN apt-get update && \
   apt-get install -y gnupg2 curl && \
@@ -12,7 +12,7 @@ RUN chmod +x /usr/bin/get-bitcoin.sh && \
   mkdir /root/bitcoin && \
   get-bitcoin.sh $VERSION /root/bitcoin/
 
-FROM debian:buster-slim
+FROM debian:trixie-slim
 
 # These buildargs can be set during container build time with --build-arg UID=[uid]
 ARG UID=1000
