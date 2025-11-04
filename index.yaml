@@ -1,0 +1,31 @@
+apiVersion: v1
+entries:
+  bitcoind:
+  - apiVersion: v1
+    appVersion: "22"
+    created: "2025-11-04T01:40:26.328251006Z"
+    description: Bitcoin node chart forked from https://github.com/chrisrun/bitcoind-chart.git
+    digest: 0fa21b9ccdcdcf007bb58034efe055ed11200d646e439bb55305eb281d6f68a2
+    home: https://chipshadd.github.io/bitcoind-chart/
+    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1024px-Bitcoin.svg.png
+    keywords:
+    - bitcoin
+    - blockchain
+    - btc
+    - helm
+    - docker
+    maintainers:
+    - email: chrisrun@users.noreply.github.com
+      name: Christian Hubmann
+      url: https://chrisrun.github.io/bitcoind-chart/
+    - email: chipshadd@gmail.com
+      name: Chip Shadd
+      url: https://chipshadd.github.io/bitcoind-chart/
+    name: bitcoind
+    sources:
+    - https://github.com/chrisrun/bitcoind-chart/
+    - https://github.com/chipshadd/bitcoind-chart/
+    urls:
+    - https://github.com/chipshadd/bitcoind-chart/releases/download/bitcoind-1.1.3-fork.2/bitcoind-1.1.3-fork.2.tgz
+    version: 1.1.3-fork.2
+generated: "2025-11-04T01:40:26.328257648Z"
