@@ -10,7 +10,7 @@ Further information about Bitcoin Core is available [here](https://github.com/bi
 ## TL;DR
 
 ```console
-helm repo add bitcoind https://chrisrun.github.io/bitcoind-chart/
+helm repo add bitcoind https://chipshadd.github.io/bitcoind-chart/
 helm upgrade --install bitcoind bitcoind/bitcoind -n bitcoind --version 1.1.0 --create-namespace
 ```
 
@@ -31,7 +31,7 @@ This chart bootstraps a [bitcoin](https://github.com/bitcoin/bitcoin) deployment
 To install the chart with the release name `bitcoind`
 
 ```bash
-$  helm repo add bitcoind https://chrisrun.github.io/bitcoind-chart/
+$  helm repo add bitcoind https://chipshadd.github.io/bitcoind-chart/
 $  helm upgrade --install bitcoind bitcoind/bitcoind -n bitcoind --create-namespace
 ```
 
@@ -43,6 +43,20 @@ These commands deploy a bitcoin full node on the Kubernetes cluster using the de
 ```bash
 	helm list -n bitcoind
 ```
+
+### Using External Secrets Operator
+
+To use ExternalSecrets for managing RPC credentials, ensure you have the [External Secrets Operator](https://external-secrets.io/) installed in your cluster and a SecretStore configured. Then install with ExternalSecrets enabled:
+
+```bash
+helm upgrade --install bitcoind bitcoind/bitcoind -n bitcoind --create-namespace \
+  --set externalSecrets.enabled=true \
+  --set externalSecrets.secretStoreRef.name=my-secret-store \
+  --set externalSecrets.remoteRefs.rpcuser.key=bitcoind/credentials \
+  --set externalSecrets.remoteRefs.rpcpassword.key=bitcoind/credentials
+```
+
+When ExternalSecrets is enabled, the chart will create an ExternalSecret resource instead of generating local secrets, allowing credentials to be sourced from external secret management systems like AWS Secrets Manager, HashiCorp Vault, or GCP Secret Manager.
 
 ## Uninstalling the Chart
 
@@ -76,6 +90,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.prune` | Autopprune (-prune=550) allows you to reduce your historical blockchain data to a given target (in MB, example uses 550 which is the minimum). You can't throw away all blocks because you may need to "roll back a couple of block" if there is a chain reorganisation. If you set prune=1 (== manual mode), you can then manually prune your blockchain (use RPC call pruneblockchain <height>) | `""`  |
 | `configuration.passwordLength` | The length of the password for the RPC user | `50`  |
 
+### External Secrets Operator Configuration
+
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `externalSecrets.enabled` | Enable ExternalSecrets integration to source RPC credentials from an external secret store | `false`  |
+| `externalSecrets.secretStoreRef.name` | Name of the SecretStore or ClusterSecretStore resource | `""`  |
+| `externalSecrets.secretStoreRef.kind` | Kind of secret store (SecretStore or ClusterSecretStore) | `SecretStore`  |
+| `externalSecrets.refreshInterval` | How often to refresh the secret from the external store | `1h`  |
+| `externalSecrets.remoteRefs.rpcuser.key` | Path to the RPC username secret in the external store | `""`  |
+| `externalSecrets.remoteRefs.rpcuser.property` | Property within the secret for RPC username (optional) | `rpcuser`  |
+| `externalSecrets.remoteRefs.rpcpassword.key` | Path to the RPC password secret in the external store | `""`  |
+| `externalSecrets.remoteRefs.rpcpassword.property` | Property within the secret for RPC password (optional) | `rpcpassword`  |
+
 ### Persistent Volume Settings
 
 | Name                      | Description                                     | Value |
@@ -85,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.storageClass` | The storage class used to provision the drive. | `gp2`  |
 
 
-### Persistent Volume Settings
+### Resource Settings
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
@@ -93,3 +120,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests.memory` | You can express memory as a plain integer or as a fixed-point number using one of these quantity suffixes: E, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki. | `1G`  |
 | `resources.limits.cpu` | Limits and requests for CPU resources are measured in cpu units. | `250m`  |
 | `resources.limits.memory` | You can express memory as a plain integer or as a fixed-point number using one of these quantity suffixes: E, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi, Mi, Ki. | `1G`  |
+
+### Scheduling Settings
+
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `nodeSelector` | Node labels for pod assignment. Allows you to constrain pods to nodes with specific labels. | `{}`  |
+| `tolerations` | Tolerations for pod assignment. Allows pods to schedule onto nodes with matching taints. | `[]`  |
+
+Example usage:
+```yaml
+nodeSelector:
+  label1: value1
+  label2: value2
+
+tolerations:
+  - key: "name"
+    value: "value"
+    effect: "NoSchedule"
+```

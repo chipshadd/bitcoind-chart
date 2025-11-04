@@ -16,6 +16,30 @@ configuration:
   passwordLength: 50 #the rpc password length
   rpcallowip: 0.0.0.0/0 #use the cluster private ip range to further restrict connection attempts
 
+# Existing Secret (optional)
+# If you want to use an existing secret instead of generating one, specify the secret name here
+# The secret must contain the key 'rpcpassword'
+existingSecret: ""
+
+# ExternalSecrets configuration
+# When enabled, secrets will be sourced from an external secret store instead of being generated
+externalSecrets:
+  enabled: false
+  # Reference to the SecretStore or ClusterSecretStore
+  secretStoreRef:
+    name: ""
+    kind: SecretStore  # SecretStore or ClusterSecretStore
+  # RefreshInterval for the ExternalSecret
+  refreshInterval: 1h
+  # Remote references for each secret
+  remoteRefs:
+    rpcuser:
+      key: ""  # Path to secret in external store (e.g., "bitcoind/rpcuser" or "prod/bitcoind")
+      property: rpcuser  # Property within the secret (optional, can be omitted if the entire secret is the value)
+    rpcpassword:
+      key: ""  # Path to secret in external store (e.g., "bitcoind/rpcpassword" or "prod/bitcoind")
+      property: rpcpassword  # Property within the secret (optional)
+
 # persistent volume settings
 persistence:
   accessMode: ReadWriteOnce
@@ -30,3 +54,9 @@ resources:
   limits:
     cpu: 250m
     memory: 1G
+
+# Node selector for pod assignment
+nodeSelector: {}
+
+# Tolerations for pod assignment
+tolerations: []
