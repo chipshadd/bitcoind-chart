@@ -1,10 +1,10 @@
 
 # Set the docker image version and tag
 image:
-  repository: chr1st1anh/bitcoind
-  tag: 22.0
-  digest: sha256:cae7d6fc598d0e0e6cb7fba1dd3507f569d7b84f2661de23e3b4fa5efc586d46
-  pullPolicy: IfNotPresent
+  repository: ""
+  tag: ""
+  pullPolicy: Always
+  digest: ""
 
 # bitcoin.conf configuration file
 configuration:
